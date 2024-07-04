@@ -50,10 +50,16 @@ if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.write("DataFrame:")
     st.dataframe(df)
+    
+    # Mostrar la imagen
+    image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
+    if os.path.exists(image_path):
+        st.image(image_path, caption="Escudo", use_column_width=True)
+    else:
+        st.error(f"Image not found: {image_path}")
 
     if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
-        image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
 
         for index, row in df.iterrows():
             data = row.to_dict()
@@ -77,3 +83,4 @@ if uploaded_file is not None:
         for pdf_file in pdf_files:
             os.remove(pdf_file)
         os.remove(zip_filename)
+
