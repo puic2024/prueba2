@@ -46,7 +46,14 @@ st.title("CSV to PDF Converter")
 # Mostrar la imagen al principio
 image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
 if os.path.exists(image_path):
-    st.image(image_path, caption="Escudo", use_column_width=False, width=250)
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center;">
+            <img src="{image_path}" alt="Escudo" width="250">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 else:
     st.error(f"Image not found: {image_path}")
 
