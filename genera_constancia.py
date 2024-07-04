@@ -43,6 +43,13 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("CSV to PDF Converter")
 
+# Mostrar la imagen al principio
+image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
+if os.path.exists(image_path):
+    st.image(image_path, caption="Escudo", use_column_width=False, width=250)
+else:
+    st.error(f"Image not found: {image_path}")
+
 # Cargar archivo CSV
 uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
@@ -50,13 +57,6 @@ if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.write("DataFrame:")
     st.dataframe(df)
-    
-    # Mostrar la imagen
-    image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
-    if os.path.exists(image_path):
-        st.image(image_path, caption="Escudo", use_column_width=True)
-    else:
-        st.error(f"Image not found: {image_path}")
 
     if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
@@ -83,4 +83,3 @@ if uploaded_file is not None:
         for pdf_file in pdf_files:
             os.remove(pdf_file)
         os.remove(zip_filename)
-
