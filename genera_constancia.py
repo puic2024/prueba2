@@ -37,7 +37,7 @@ if uploaded_file is not None:
     st.write("DataFrame:")
     st.dataframe(df)
 
-    if st.button("Generar PDFs y Descargar ZIP"):
+    if st.button("Generar PDFs"):
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
