@@ -4,14 +4,25 @@ from fpdf import FPDF
 import zipfile
 import os
 
-# Función para generar el PDF con texto centrado
-def generate_pdf(data, filename):
+# Función para generar el PDF con imagen centrada y texto centrado
+def generate_pdf(data, filename, image_path):
     pdf = FPDF()
     pdf.add_page()
     
-    pdf.set_font("Arial", size=12)
+    # Añadir imagen centrada
+    image_width = 50  # Ancho deseado de la imagen
+    image_height = 50  # Altura deseada de la imagen
     page_width = pdf.w - 2 * pdf.l_margin
+    page_height = pdf.h - 2 * pdf.t_margin
+    image_x = (page_width - image_width) / 2
+    image_y = pdf.t_margin + 10
+    pdf.image(image_path, x=image_x, y=image_y, w=image_width, h=image_height)
     
+    # Ajustar la posición para el texto debajo de la imagen
+    pdf.set_y(image_y + image_height + 10)
+    
+    # Añadir texto centrado
+    pdf.set_font("Arial", size=12)
     for key, value in data.items():
         text = f"{key}: {value}"
         text_width = pdf.get_string_width(text) + 6
@@ -39,10 +50,12 @@ if uploaded_file is not None:
 
     if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
+        image_path = "escudo.jpg"  # Ruta de la imagen
+
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"  # Ajusta según el campo de nombre
-            generate_pdf(data, pdf_filename)
+            generate_pdf(data, pdf_filename, image_path)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
