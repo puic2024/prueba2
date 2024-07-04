@@ -9,17 +9,20 @@ def generate_pdf(data, filename, image_path):
     pdf = FPDF()
     pdf.add_page()
     
-    # Añadir imagen centrada
-    image_width = 50  # Ancho deseado de la imagen
-    image_height = 50  # Altura deseada de la imagen
-    page_width = pdf.w - 2 * pdf.l_margin
-    page_height = pdf.h - 2 * pdf.t_margin
-    image_x = (page_width - image_width) / 2
-    image_y = pdf.t_margin + 10
-    pdf.image(image_path, x=image_x, y=image_y, w=image_width, h=image_height)
-    
-    # Ajustar la posición para el texto debajo de la imagen
-    pdf.set_y(image_y + image_height + 10)
+    # Verificar que la imagen exista
+    if os.path.exists(image_path):
+        # Añadir imagen centrada
+        image_width = 50  # Ancho deseado de la imagen
+        image_height = 50  # Altura deseada de la imagen
+        page_width = pdf.w - 2 * pdf.l_margin
+        image_x = (page_width - image_width) / 2
+        image_y = pdf.t_margin + 10
+        pdf.image(image_path, x=image_x, y=image_y, w=image_width, h=image_height)
+        
+        # Ajustar la posición para el texto debajo de la imagen
+        pdf.set_y(image_y + image_height + 10)
+    else:
+        return
     
     # Añadir texto centrado
     pdf.set_font("Arial", size=12)
@@ -50,7 +53,7 @@ if uploaded_file is not None:
 
     if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
-        image_path = "escudo.jpg"  # Ruta de la imagen
+        image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
 
         for index, row in df.iterrows():
             data = row.to_dict()
