@@ -4,14 +4,19 @@ from fpdf import FPDF
 import zipfile
 import os
 
-# Función para generar el PDF
+# Función para generar el PDF con texto centrado
 def generate_pdf(data, filename):
     pdf = FPDF()
     pdf.add_page()
     
     pdf.set_font("Arial", size=12)
+    page_width = pdf.w - 2 * pdf.l_margin
+    
     for key, value in data.items():
-        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True, align='L')
+        text = f"{key}: {value}"
+        text_width = pdf.get_string_width(text) + 6
+        pdf.set_x((page_width - text_width) / 2)
+        pdf.cell(text_width, 10, text, ln=True, align='C')
     
     pdf.output(filename)
 
@@ -22,17 +27,17 @@ def create_zip(pdf_files, zip_filename):
             zipf.write(pdf_file, os.path.basename(pdf_file))
 
 # Configuración de Streamlit
-st.title("Creador de constancias PUIC.")
+st.title("CSV to PDF Converter")
 
 # Cargar archivo CSV
-uploaded_file = st.file_uploader("Importar CSV", type=["csv"])
+uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.write("DataFrame:")
     st.dataframe(df)
 
-    if st.button("Genera PDF"):
+    if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
@@ -46,7 +51,7 @@ if uploaded_file is not None:
         with open(zip_filename, "rb") as f:
             bytes_data = f.read()
             st.download_button(
-                label="Descarga ZIP",
+                label="Download ZIP",
                 data=bytes_data,
                 file_name=zip_filename,
                 mime="application/zip"
