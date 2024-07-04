@@ -4,25 +4,21 @@ from fpdf import FPDF
 import zipfile
 import os
 
-# Función para generar el PDF con imagen centrada y texto centrado
-def generate_pdf(data, filename, image_path):
+# Función para generar el PDF con texto centrado
+def generate_pdf(data, filename):
     pdf = FPDF()
     pdf.add_page()
     
-    # Verificar que la imagen exista
-    if os.path.exists(image_path):
-        # Añadir imagen
-        pdf.image(image_path, x=10, y=10, w=50)
-        
-        # Añadir texto centrado
-        pdf.set_font("Arial", size=12)
-        for key, value in data.items():
-            text = f"{key}: {value}"
-            text_width = pdf.get_string_width(text) + 6
-            pdf.set_x((pdf.w - text_width) / 2)
-            pdf.cell(text_width, 10, text, ln=True, align='C')
-        
-        pdf.output(filename)
+    pdf.set_font("Arial", size=12)
+    page_width = pdf.w - 2 * pdf.l_margin
+    
+    for key, value in data.items():
+        text = f"{key}: {value}"
+        text_width = pdf.get_string_width(text) + 6
+        pdf.set_x((page_width - text_width) / 2)
+        pdf.cell(text_width, 10, text, ln=True, align='C')
+    
+    pdf.output(filename)
 
 # Función para crear archivos ZIP
 def create_zip(pdf_files, zip_filename):
@@ -32,13 +28,6 @@ def create_zip(pdf_files, zip_filename):
 
 # Configuración de Streamlit
 st.title("CSV to PDF Converter")
-
-# Mostrar la imagen al principio
-image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
-if os.path.exists(image_path):
-    st.image(image_path, caption="Escudo", use_column_width=False)
-else:
-    st.error(f"Image not found: {image_path}")
 
 # Cargar archivo CSV
 uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
@@ -50,11 +39,10 @@ if uploaded_file is not None:
 
     if st.button("Generate PDFs and Download ZIP"):
         pdf_files = []
-
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"  # Ajusta según el campo de nombre
-            generate_pdf(data, pdf_filename, image_path)
+            generate_pdf(data, pdf_filename)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
