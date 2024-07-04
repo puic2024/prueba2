@@ -11,28 +11,18 @@ def generate_pdf(data, filename, image_path):
     
     # Verificar que la imagen exista
     if os.path.exists(image_path):
-        # Añadir imagen centrada
-        image_width = 50  # Ancho deseado de la imagen
-        image_height = 50  # Altura deseada de la imagen
-        page_width = pdf.w - 2 * pdf.l_margin
-        image_x = (page_width - image_width) / 2
-        image_y = pdf.t_margin + 10
-        pdf.image(image_path, x=image_x, y=image_y, w=image_width, h=image_height)
+        # Añadir imagen
+        pdf.image(image_path, x=10, y=10, w=50)
         
-        # Ajustar la posición para el texto debajo de la imagen
-        pdf.set_y(image_y + image_height + 10)
-    else:
-        return
-    
-    # Añadir texto centrado
-    pdf.set_font("Arial", size=12)
-    for key, value in data.items():
-        text = f"{key}: {value}"
-        text_width = pdf.get_string_width(text) + 6
-        pdf.set_x((page_width - text_width) / 2)
-        pdf.cell(text_width, 10, text, ln=True, align='C')
-    
-    pdf.output(filename)
+        # Añadir texto centrado
+        pdf.set_font("Arial", size=12)
+        for key, value in data.items():
+            text = f"{key}: {value}"
+            text_width = pdf.get_string_width(text) + 6
+            pdf.set_x((pdf.w - text_width) / 2)
+            pdf.cell(text_width, 10, text, ln=True, align='C')
+        
+        pdf.output(filename)
 
 # Función para crear archivos ZIP
 def create_zip(pdf_files, zip_filename):
@@ -46,14 +36,7 @@ st.title("CSV to PDF Converter")
 # Mostrar la imagen al principio
 image_path = "imagenes/escudo.jpg"  # Ruta de la imagen
 if os.path.exists(image_path):
-    st.markdown(
-        f"""
-        <div style="display: flex; justify-content: center;">
-            <img src="{image_path}" alt="Escudo" width="250">
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.image(image_path, caption="Escudo", use_column_width=False)
 else:
     st.error(f"Image not found: {image_path}")
 
