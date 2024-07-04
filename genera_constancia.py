@@ -22,17 +22,17 @@ def create_zip(pdf_files, zip_filename):
             zipf.write(pdf_file, os.path.basename(pdf_file))
 
 # Configuración de Streamlit
-st.title("CSV to PDF Converter")
+st.title("Creador de constancias PUIC.")
 
 # Cargar archivo CSV
-uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+uploaded_file = st.file_uploader("Importar CSV", type=["csv"])
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
     st.write("DataFrame:")
     st.dataframe(df)
 
-    if st.button("Generate PDFs and Download ZIP"):
+    if st.button("Genera PDF"):
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
@@ -46,7 +46,7 @@ if uploaded_file is not None:
         with open(zip_filename, "rb") as f:
             bytes_data = f.read()
             st.download_button(
-                label="Download ZIP",
+                label="Descarga ZIP",
                 data=bytes_data,
                 file_name=zip_filename,
                 mime="application/zip"
