@@ -1,25 +1,58 @@
 import streamlit as st
 import pandas as pd
-# Título de la aplicación
-st.title("Cargar y Mostrar Archivo CSV")
-# Descripción de la aplicación
-st.write("""
-Esta aplicación te permite cargar un archivo CSV y visualizar su contenido en forma de DataFrame.
-""")
-# Subir el archivo CSV
-uploaded_file = st.file_uploader("Elige un archivo CSV", type=["csv"])
-# Si se sube un archivo
+from fpdf import FPDF
+import zipfile
+import os
+
+# Función para generar el PDF
+def generate_pdf(data, filename):
+    pdf = FPDF()
+    pdf.add_page()
+    
+    pdf.set_font("Arial", size=12)
+    for key, value in data.items():
+        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True, align='L')
+    
+    pdf.output(filename)
+
+# Función para crear archivos ZIP
+def create_zip(pdf_files, zip_filename):
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        for pdf_file in pdf_files:
+            zipf.write(pdf_file, os.path.basename(pdf_file))
+
+# Configuración de Streamlit
+st.title("CSV to PDF Converter")
+
+# Cargar archivo CSV
+uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+
 if uploaded_file is not None:
-   try:
-       # Leer el archivo CSV
-       df = pd.read_csv(uploaded_file)
-       # Mostrar algunas estadísticas básicas del DataFrame
-       st.write("## Estadísticas del DataFrame:")
-       st.write(df.describe())
-       # Mostrar el DataFrame
-       st.write("## Contenido del DataFrame:")
-       st.dataframe(df)
-   except Exception as e:
-       st.error(f"Error al leer el archivo CSV: {e}")
-else:
-   st.info("Por favor, sube un archivo CSV para continuar.")
+    df = pd.read_csv(uploaded_file)
+    st.write("DataFrame:")
+    st.dataframe(df)
+
+    if st.button("Generate PDFs and Download ZIP"):
+        pdf_files = []
+        for index, row in df.iterrows():
+            data = row.to_dict()
+            pdf_filename = f"{data['nombre']}.pdf"  # Ajusta según el campo de nombre
+            generate_pdf(data, pdf_filename)
+            pdf_files.append(pdf_filename)
+        
+        zip_filename = "pdf_files.zip"
+        create_zip(pdf_files, zip_filename)
+        
+        with open(zip_filename, "rb") as f:
+            bytes_data = f.read()
+            st.download_button(
+                label="Download ZIP",
+                data=bytes_data,
+                file_name=zip_filename,
+                mime="application/zip"
+            )
+        
+        # Limpiar archivos temporales
+        for pdf_file in pdf_files:
+            os.remove(pdf_file)
+        os.remove(zip_filename)
