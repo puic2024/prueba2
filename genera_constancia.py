@@ -33,7 +33,7 @@ st.title("Generador de constancias PUIC")
 uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
 
 if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+    df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
     st.dataframe(df)
 
