@@ -34,7 +34,7 @@ uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
-    df.fillna('', inplace=True)  # Rellenar valores nulos con una cadena vacía
+    df.fillna('NA', inplace=True)  # Rellenar valores nulos con la cadena "NA"
     st.write("DataFrame:")
     st.dataframe(df)
 
