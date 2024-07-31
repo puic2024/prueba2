@@ -29,6 +29,9 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
+# Mostrar imagen al principio
+st.image("imagenes/escudo.jpg", use_column_width=True)
+
 # Cargar archivo CSV
 uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
 
