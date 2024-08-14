@@ -7,21 +7,22 @@ from PIL import Image
 
 # Función para generar el PDF con una imagen de fondo
 def generate_pdf(data, filename, background_image):
-    pdf = FPDF()
+    # Crear un objeto FPDF con dimensiones personalizadas
+    pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
     
     # Cargar la imagen de fondo y ajustar el tamaño al tamaño de la página
-    pdf.image(background_image, x=0, y=0, w=pdf.w, h=pdf.h)
+    pdf.image(background_image, x=0, y=0, w=1650, h=1275)
     
-    pdf.set_font("Arial", size=12)
-    page_width = pdf.w - 2 * pdf.l_margin
+    pdf.set_font("Arial", size=48)  # Aumentar el tamaño de la fuente para adaptarse al nuevo tamaño del PDF
+    page_width = 1650 - 2 * pdf.l_margin
     
     # Ajustar el texto sobre el fondo
     for key, value in data.items():
         text = f"{key}: {value}"
         text_width = pdf.get_string_width(text) + 6
         pdf.set_x((page_width - text_width) / 2)
-        pdf.cell(text_width, 10, text, ln=True, align='C')
+        pdf.cell(text_width, 60, text, ln=True, align='C')
     
     pdf.output(filename)
 
