@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from fpdf import FPDF
+from pdf2image import convert_from_path
 import zipfile
 import os
 from PIL import Image
@@ -20,7 +21,7 @@ def generate_pdf(data, filename, background_image):
     line_height = pdf.font_size * 2  # Altura de cada línea de texto
     total_text_height = line_height * len(data)  # Altura total del bloque de texto
     
-    y_start = (1275 - total_text_height) / 2 + 200  # Posición inicial en el eje y para centrar y bajar el texto
+    y_start = (1275 - total_text_height) / 2 + 30  # Posición inicial en el eje y para centrar y bajar el texto
     
     # Ajustar el texto sobre el fondo, centrado horizontal y verticalmente
     for value in data.values():
@@ -66,6 +67,16 @@ if uploaded_file is not None and background_image is not None:
             generate_pdf(data, pdf_filename, bg_image_path)
             pdf_files.append(pdf_filename)
         
+        # Convertir el primer PDF a PNG y mostrarlo
+        if pdf_files:
+            first_pdf = pdf_files[0]
+            images = convert_from_path(first_pdf)
+            if images:
+                first_image = images[0]
+                first_image_path = "first_pdf_image.png"
+                first_image.save(first_image_path, "PNG")
+                st.image(first_image_path)
+        
         zip_filename = "pdf_files.zip"
         create_zip(pdf_files, zip_filename)
         
@@ -83,3 +94,5 @@ if uploaded_file is not None and background_image is not None:
             os.remove(pdf_file)
         os.remove(zip_filename)
         os.remove(bg_image_path)
+        if os.path.exists(first_image_path):
+            os.remove(first_image_path)
