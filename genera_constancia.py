@@ -16,11 +16,11 @@ def generate_pdf(data, filename, background_image):
     
     pdf.set_font("Arial", size=48)  # Tamaño de la fuente grande para adaptarse al tamaño del PDF
     
-    # Variables para centrar el texto verticalmente
+    # Variables para centrar el texto verticalmente y luego bajarlo 30 píxeles
     line_height = pdf.font_size * 2  # Altura de cada línea de texto
     total_text_height = line_height * len(data)  # Altura total del bloque de texto
     
-    y_start = (1275 - total_text_height) / 2  # Posición inicial en el eje y para centrar el texto
+    y_start = (1275 - total_text_height) / 2 + 30  # Posición inicial en el eje y para centrar y bajar el texto
     
     # Ajustar el texto sobre el fondo, centrado horizontal y verticalmente
     for value in data.values():
