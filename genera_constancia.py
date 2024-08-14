@@ -5,7 +5,7 @@ import zipfile
 import os
 from PIL import Image
 
-# Función para generar el PDF con una imagen de fondo
+# Función para generar el PDF con una imagen de fondo y texto centrado
 def generate_pdf(data, filename, background_image):
     # Crear un objeto FPDF con dimensiones personalizadas
     pdf = FPDF(unit='pt', format=[1650, 1275])
@@ -14,15 +14,21 @@ def generate_pdf(data, filename, background_image):
     # Cargar la imagen de fondo y ajustar el tamaño al tamaño de la página
     pdf.image(background_image, x=0, y=0, w=1650, h=1275)
     
-    pdf.set_font("Arial", size=48)  # Aumentar el tamaño de la fuente para adaptarse al nuevo tamaño del PDF
-    page_width = 1650 - 2 * pdf.l_margin
+    pdf.set_font("Arial", size=48)  # Tamaño de la fuente grande para adaptarse al tamaño del PDF
     
-    # Ajustar el texto sobre el fondo
+    # Variables para centrar el texto verticalmente
+    line_height = pdf.font_size * 2  # Altura de cada línea de texto
+    total_text_height = line_height * len(data)  # Altura total del bloque de texto
+    
+    y_start = (1275 - total_text_height) / 2  # Posición inicial en el eje y para centrar el texto
+    
+    # Ajustar el texto sobre el fondo, centrado horizontal y verticalmente
     for key, value in data.items():
         text = f"{key}: {value}"
         text_width = pdf.get_string_width(text) + 6
-        pdf.set_x((page_width - text_width) / 2)
-        pdf.cell(text_width, 60, text, ln=True, align='C')
+        pdf.set_xy((1650 - text_width) / 2, y_start)
+        pdf.cell(text_width, line_height, text, ln=True, align='C')
+        y_start += line_height  # Mover la posición y para la siguiente línea de texto
     
     pdf.output(filename)
 
