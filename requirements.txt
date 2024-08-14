@@ -2,3 +2,4 @@ fpdf
 reportlab 
 Pillow 
 pytesseract
+pdf2image
