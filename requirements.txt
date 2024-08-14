@@ -1,1 +1,4 @@
 fpdf
+reportlab 
+Pillow 
+pytesseract
