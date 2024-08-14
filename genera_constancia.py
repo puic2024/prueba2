@@ -3,15 +3,20 @@ import pandas as pd
 from fpdf import FPDF
 import zipfile
 import os
+from PIL import Image
 
-# Función para generar el PDF con texto centrado
-def generate_pdf(data, filename):
+# Función para generar el PDF con una imagen de fondo
+def generate_pdf(data, filename, background_image):
     pdf = FPDF()
     pdf.add_page()
+    
+    # Cargar la imagen de fondo y ajustar el tamaño al tamaño de la página
+    pdf.image(background_image, x=0, y=0, w=pdf.w, h=pdf.h)
     
     pdf.set_font("Arial", size=12)
     page_width = pdf.w - 2 * pdf.l_margin
     
+    # Ajustar el texto sobre el fondo
     for key, value in data.items():
         text = f"{key}: {value}"
         text_width = pdf.get_string_width(text) + 6
@@ -34,18 +39,24 @@ st.image("imagenes/escudo.jpg")
 
 # Cargar archivo CSV
 uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
+background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
 
-if uploaded_file is not None:
+if uploaded_file is not None and background_image is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
     st.dataframe(df)
 
     if st.button("Generar PDFs"):
+        # Guardar la imagen de fondo en un archivo temporal
+        bg_image_path = "background_image.png"
+        with open(bg_image_path, "wb") as f:
+            f.write(background_image.read())
+        
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"  # Ajusta según el campo de nombre
-            generate_pdf(data, pdf_filename)
+            generate_pdf(data, pdf_filename, bg_image_path)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
@@ -64,3 +75,4 @@ if uploaded_file is not None:
         for pdf_file in pdf_files:
             os.remove(pdf_file)
         os.remove(zip_filename)
+        os.remove(bg_image_path)
