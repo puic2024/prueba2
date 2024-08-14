@@ -23,8 +23,8 @@ def generate_pdf(data, filename, background_image):
     y_start = (1275 - total_text_height) / 2  # Posición inicial en el eje y para centrar el texto
     
     # Ajustar el texto sobre el fondo, centrado horizontal y verticalmente
-    for key, value in data.items():
-        text = f"{key}: {value}"
+    for value in data.values():
+        text = str(value)  # Convertir el valor a cadena de texto
         text_width = pdf.get_string_width(text) + 6
         pdf.set_xy((1650 - text_width) / 2, y_start)
         pdf.cell(text_width, line_height, text, ln=True, align='C')
