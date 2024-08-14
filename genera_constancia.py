@@ -14,7 +14,7 @@ def generate_pdf(data, filename, background_image):
     # Cargar la imagen de fondo y ajustar el tamaño al tamaño de la página
     pdf.image(background_image, x=0, y=0, w=1650, h=1275)
     
-    pdf.set_font("Arial", size=24)  # Reducir tamaño de la fuente a la mitad
+    pdf.set_font("Arial", size=30)  # Reducir tamaño de la fuente a la mitad
     
     # Variables para centrar el texto verticalmente y luego bajarlo 30 píxeles
     line_height = pdf.font_size * 1.5  # Altura de cada línea de texto
