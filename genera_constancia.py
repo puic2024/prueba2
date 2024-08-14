@@ -21,7 +21,7 @@ def generate_pdf(data, filename, background_image):
     total_text_height = line_height * len(data)  # Altura total del bloque de texto
     
     #y_start = (1275 - total_text_height) / 2 + 70  # Posición inicial en el eje y para centrar y bajar el texto
-    y_start = 450
+    y_start = 470
     
     # Ajustar el texto sobre el fondo, centrado horizontal y verticalmente
     for value in data.values():
