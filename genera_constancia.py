@@ -39,16 +39,17 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
             # Ajustar y_start dependiendo del número de líneas ocupadas
             y_start += line_height * lines_count
     
-    # Distribuir las imágenes adicionales de manera uniforme y centrada
+    # Distribuir las imágenes adicionales de manera uniforme y centrada con tamaño 150x150
     if additional_images:
-        image_width = 200  # Ancho de cada imagen
+        image_width = 150  # Ancho de cada imagen
+        image_height = 150  # Alto de cada imagen
         spacing = (1650 - (image_width * len(additional_images))) / (len(additional_images) + 1)
         y_position = y_start + 20  # Posición vertical después del último texto
 
         for i, image_path in enumerate(additional_images):
             if os.path.exists(image_path):
                 try:
-                    pdf.image(image_path, x=spacing + i * (image_width + spacing), y=y_position, w=image_width)
+                    pdf.image(image_path, x=spacing + i * (image_width + spacing), y=y_position, w=image_width, h=image_height)
                 except RuntimeError as e:
                     st.error(f"No se pudo cargar la imagen {image_path}. Error: {e}")
             else:
