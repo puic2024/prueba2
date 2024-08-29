@@ -64,13 +64,7 @@ if input_text:
     st.write("DataFrame:")
     st.dataframe(df)
 
-# Input para que el usuario defina la altura inicial del texto
-y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", min_value=0, value=460)
-
-# Input para que el usuario defina el valor del interlineado
-line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
-
-# Input de texto para la configuración de las fuentes
+# Input de texto para la configuración de las fuentes (después del DataFrame)
 font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
 {
     "dirigido": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
@@ -81,6 +75,12 @@ font_settings_input = st.text_area("Introduce la configuración de las fuentes (
     "fecha": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)}
 }
 """)
+
+# Input para que el usuario defina la altura inicial del texto
+y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", min_value=0, value=460)
+
+# Input para que el usuario defina el valor del interlineado
+line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
 # Cargar la imagen de fondo con valor predeterminado
 background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
