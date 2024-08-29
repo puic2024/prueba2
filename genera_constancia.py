@@ -6,7 +6,7 @@ import os
 import ast
 
 # Función para generar el PDF con una imagen de fondo y texto parametrizado
-def generate_pdf(data, filename, background_image, font_settings, y_start):
+def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier):
     pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
     pdf.image(background_image, x=0, y=0, w=1650, h=1275)
@@ -21,7 +21,7 @@ def generate_pdf(data, filename, background_image, font_settings, y_start):
             pdf.set_font(font_type, size=font_size)
             pdf.set_text_color(*font_color)
             
-            line_height = pdf.font_size * 1.2
+            line_height = pdf.font_size * line_height_multiplier
             text_width = 1100  # Ancho fijo para el texto
             pdf.set_xy((1650 - text_width) / 2, y_start)
             
@@ -58,6 +58,9 @@ font_file = st.file_uploader("Cargar archivo de configuración de fuentes (txt)"
 # Input para que el usuario defina el valor inicial de y_start
 y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value=460)
 
+# Input para que el usuario defina el valor del interlineado
+line_height_multiplier = st.number_input("Valor del interlineado (multiplicador):", min_value=0.5, value=1.3, step=0.1)
+
 if uploaded_file is not None and background_image is not None and font_file is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
@@ -79,7 +82,7 @@ if uploaded_file is not None and background_image is not None and font_file is n
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, bg_image_path, font_settings, y_start_user)
+            generate_pdf(data, pdf_filename, bg_image_path, font_settings, y_start_user, line_height_multiplier)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
