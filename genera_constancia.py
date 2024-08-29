@@ -62,20 +62,16 @@ y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value
 line_height_multiplier = st.number_input("Valor del interlineado (multiplicador):", min_value=0.5, value=1.3, step=0.1)
 
 # Input de texto para la configuración de las fuentes
-font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300)
-font_settings_input_default = """
+font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
 {
-    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
-    "nombre": {"tamaño": 24, "tipo_letra": "Times", "estilo": "B", "color": (0, 0, 0)},
-    "por": {"tamaño": 18, "tipo_letra": "Courier", "estilo": "I", "color": (0, 0, 0)},
-    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "estilo": "", "color": (0, 0, 0)},
-    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "estilo": "BI", "color": (0, 0, 0)},
-    "fecha": {"tamaño": 18, "tipo_letra": "Times", "estilo": "", "color": (0, 0, 0)}
+    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},  # Normal
+    "nombre": {"tamaño": 24, "tipo_letra": "Times", "estilo": "B", "color": (0, 0, 0)},  # Negrita
+    "por": {"tamaño": 18, "tipo_letra": "Courier", "estilo": "I", "color": (0, 0, 0)},  # Cursiva
+    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "estilo": "", "color": (0, 0, 0)},  # Normal
+    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "estilo": "BI", "color": (0, 0, 0)},  # Negrita y Cursiva
+    "fecha": {"tamaño": 18, "tipo_letra": "Times", "estilo": "", "color": (0, 0, 0)}  # Normal
 }
-"""
-# Llenar el input de texto con un valor por defecto
-if not font_settings_input.strip():
-    font_settings_input = font_settings_input_default
+""")
 
 if uploaded_file is not None and background_image is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
