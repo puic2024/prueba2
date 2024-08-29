@@ -75,6 +75,14 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
+# Mostrar la imagen "escudo.jpg" justo después del título
+escudo_image_path = "imagenes/escudo.jpg"
+if os.path.exists(escudo_image_path):
+    escudo_image = Image.open(escudo_image_path)
+    st.image(escudo_image, caption="Escudo", use_column_width=True)
+else:
+    st.error(f"La imagen {escudo_image_path} no existe.")
+
 # Cargar la imagen de fondo con valor predeterminado (después del título)
 background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
 if background_image is None:
