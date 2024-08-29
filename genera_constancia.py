@@ -90,7 +90,8 @@ else:
     st.error(f"La imagen {escudo_image_path} no existe.")
 
 # Cargar la imagen de fondo con valor predeterminado (después del título)
-background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
+st.markdown("### Cargar imagen de fondo:")
+background_image = st.file_uploader("", type=["png"], accept_multiple_files=False)
 if background_image is None:
     background_image_path = "imagenes/background.png"
 else:
@@ -104,7 +105,8 @@ image = image.resize((330, 255))
 st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
 # Input para que el usuario introduzca el texto delimitado por "|"
-input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
+st.markdown("### Introduce a los usuarios delimitado por '|':")
+input_text = st.text_area("", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
 a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
@@ -118,7 +120,8 @@ if input_text:
     st.dataframe(df)
 
 # Input de texto para la configuración de las fuentes (después del DataFrame)
-font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
+st.markdown("### Introduce la configuración de las fuentes (en formato de diccionario):")
+font_settings_input = st.text_area("", height=300, value="""
 {
     "dirigido": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
     "nombre": {"tamaño": 40, "tipo_letra": "Arial", "estilo": "B", "color": (0, 0, 0)},
@@ -136,7 +139,8 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
-selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
+st.markdown("### Seleccione el número de firmantes:")
+selected_value = st.selectbox("", options=[1, 2, 3])
 
 # Cargar las imágenes adicionales según el valor seleccionado
 uploaded_images = []
