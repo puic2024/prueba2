@@ -124,11 +124,10 @@ line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
 selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
 
-# Cargar las imágenes adicionales según el valor seleccionado, con la imagen precargada
-uploaded_images = ["imagenes/Dr. Homero Simpson.png"]
-
-for i in range(selected_value - 1):  # selected_value - 1 porque una imagen ya está precargada
-    image = st.file_uploader(f"Cargar imagen adicional {i+2}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
+# Cargar las imágenes adicionales según el valor seleccionado
+uploaded_images = []
+for i in range(selected_value):
+    image = st.file_uploader(f"Cargar imagen adicional {i+1}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
     if image:
         image_path = image.name
         with open(image_path, "wb") as f:
