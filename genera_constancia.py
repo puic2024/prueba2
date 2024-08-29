@@ -66,9 +66,9 @@ line_height_multiplier = st.number_input("Valor del interlineado (multiplicador)
 font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
 {
     "dirigido": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
-    "nombre": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "nombre": {"tamaño": 40, "tipo_letra": "Arial", "estilo": "B", "color": (0, 0, 0)},
     "por": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
-    "actividad": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "actividad": {"tamaño": 40, "tipo_letra": "Arial", "estilo": "B", "color": (0, 0, 0)},
     "eslogan": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
     "fecha": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)}
 }
