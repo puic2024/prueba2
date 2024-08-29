@@ -46,8 +46,13 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
         y_position = y_start + 20  # Posición vertical después del último texto
 
         for i, image_path in enumerate(additional_images):
-            x_position = spacing + i * (image_width + spacing)
-            pdf.image(image_path, x=x_position, y=y_position, w=image_width)
+            if os.path.exists(image_path):
+                try:
+                    pdf.image(image_path, x=spacing + i * (image_width + spacing), y=y_position, w=image_width)
+                except RuntimeError as e:
+                    st.error(f"No se pudo cargar la imagen {image_path}. Error: {e}")
+            else:
+                st.error(f"La imagen {image_path} no existe o no se pudo cargar.")
 
     pdf.output(filename)
 
@@ -153,3 +158,5 @@ if input_text and font_settings_input:
         os.remove(zip_filename)
         if background_image is not None:
             os.remove(background_image_path)
+        for image_path in uploaded_images:
+            os.remove(image_path)
