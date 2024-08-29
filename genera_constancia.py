@@ -5,6 +5,7 @@ import zipfile
 import os
 import ast
 from io import StringIO
+from PIL import Image
 
 # Función para generar el PDF con una imagen de fondo y texto parametrizado
 def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier):
@@ -74,10 +75,21 @@ font_settings_input = st.text_area("Introduce la configuración de las fuentes (
 }
 """)
 
-# Cargar la imagen de fondo
-background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
+# Cargar la imagen de fondo con valor predeterminado
+background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
+if background_image is None:
+    background_image_path = "imagenes/background.png"
+else:
+    background_image_path = background_image.name
+    with open(background_image_path, "wb") as f:
+        f.write(background_image.read())
 
-if input_text and background_image is not None:
+# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
+image = Image.open(background_image_path)
+image = image.resize((330, 255))
+st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
+
+if input_text:
     # Convertir el texto en un DataFrame
     input_data = StringIO(input_text)
     df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
@@ -91,15 +103,11 @@ if input_text and background_image is not None:
         font_settings = None
     
     if font_settings and st.button("Generar PDFs"):
-        bg_image_path = "background_image.png"
-        with open(bg_image_path, "wb") as f:
-            f.write(background_image.read())
-        
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, bg_image_path, font_settings, y_start_user, line_height_multiplier)
+            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
@@ -118,4 +126,5 @@ if input_text and background_image is not None:
         for pdf_file in pdf_files:
             os.remove(pdf_file)
         os.remove(zip_filename)
-        os.remove(bg_image_path)
+        if background_image is not None:
+            os.remove(background_image_path)
