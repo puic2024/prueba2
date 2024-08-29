@@ -22,12 +22,13 @@ def generate_pdf(data, filename, background_image, font_settings):
             pdf.set_font(font_type, size=font_size)
             pdf.set_text_color(*font_color)
             
+            # Calcula el ancho disponible y usa multi_cell para manejar saltos de línea automáticos
             text_width = pdf.get_string_width(text) + 6
             line_height = pdf.font_size * 1.5
-            pdf.set_xy((1650 - text_width) / 2, y_start)
-            #pdf.set_xy((1650 - 12) / 2, y_start)
-            pdf.cell(text_width, line_height, text, ln=True, align='C')
-            y_start += line_height
+            pdf.set_xy((1650 - 1100) / 2, y_start)  # Ajustar según el ancho disponible
+            pdf.multi_cell(1100, line_height, text, align='C')  # Ancho de 1100 pt para el texto
+            
+            y_start += line_height * (text.count('\n') + 1)  # Ajustar y_start para la siguiente línea
     
     pdf.output(filename)
 
@@ -56,7 +57,6 @@ if uploaded_file is not None and background_image is not None and font_file is n
     # Leer y mostrar el contenido del archivo de configuración de fuentes
     font_file_content = font_file.read().decode('utf-8')
     st.write("Contenido del archivo de configuración de fuentes (txt):")
-    #st.write(text_width)
     st.code(font_file_content, language='python')
     
     font_settings = ast.literal_eval(font_file_content)
