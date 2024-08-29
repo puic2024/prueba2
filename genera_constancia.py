@@ -121,8 +121,19 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 # Input para que el usuario defina el valor del interlineado
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
-# Precargar la imagen adicional
+# Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
+selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
+
+# Cargar las imágenes adicionales según el valor seleccionado, con la imagen precargada
 uploaded_images = ["imagenes/Dr. Homero Simpson.png"]
+
+for i in range(selected_value - 1):  # selected_value - 1 porque una imagen ya está precargada
+    image = st.file_uploader(f"Cargar imagen adicional {i+2}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
+    if image:
+        image_path = image.name
+        with open(image_path, "wb") as f:
+            f.write(image.read())
+        uploaded_images.append(image_path)
 
 # Botón para generar PDFs y descargar el ZIP
 if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
@@ -159,3 +170,5 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
         os.remove(zip_filename)
         if background_image is not None:
             os.remove(background_image_path)
+        for image_path in uploaded_images:
+            os.remove(image_path)
