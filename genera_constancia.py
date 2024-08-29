@@ -22,13 +22,20 @@ def generate_pdf(data, filename, background_image, font_settings):
             pdf.set_font(font_type, size=font_size)
             pdf.set_text_color(*font_color)
             
-            # Calcula el ancho disponible y usa multi_cell para manejar saltos de línea automáticos
-            text_width = pdf.get_string_width(text) + 6
             line_height = pdf.font_size * 1.5
-            pdf.set_xy((1650 - 1100) / 2, y_start)  # Ajustar según el ancho disponible
-            pdf.multi_cell(1100, line_height, text, align='C')  # Ancho de 1100 pt para el texto
+            text_width = 1100  # Ancho fijo para el texto
+            pdf.set_xy((1650 - text_width) / 2, y_start)
             
-            y_start += line_height * (text.count('\n') + 1)  # Ajustar y_start para la siguiente línea
+            # Contar el número de líneas que el texto ocupará
+            lines = pdf.multi_cell(text_width, line_height, text, align='C', split_only=True)
+            lines_count = len(lines)
+            
+            # Dibujar el texto con salto de línea automático
+            pdf.set_xy((1650 - text_width) / 2, y_start)
+            pdf.multi_cell(text_width, line_height, text, align='C')
+            
+            # Ajustar y_start dependiendo del número de líneas ocupadas
+            y_start += line_height * lines_count
     
     pdf.output(filename)
 
