@@ -81,7 +81,7 @@ escudo_image = Image.open(escudo_image_path)
 
 # Reducir las dimensiones a la mitad
 width, height = escudo_image.size
-escudo_image = escudo_image.resize((width // 2, height // 2))
+escudo_image = escudo_image.resize((width // 1.5, height // 1.5))
 
 # Mostrar la imagen redimensionada
 st.image(escudo_image, caption="Escudo", use_column_width=False)
