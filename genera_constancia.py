@@ -134,15 +134,15 @@ for i in range(selected_value):
             f.write(image.read())
         uploaded_images.append(image_path)
 
-# Botón para generar PDFs (al final del proceso)
-if input_text and font_settings_input:
+# Botón para generar PDFs y descargar el ZIP
+if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
     try:
         font_settings = ast.literal_eval(font_settings_input)
     except Exception as e:
         st.error(f"Error en la configuración de fuentes: {e}")
         font_settings = None
     
-    if font_settings and st.button("Generar PDFs"):
+    if font_settings:
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
