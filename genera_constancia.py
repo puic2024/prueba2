@@ -6,11 +6,10 @@ import os
 import ast
 
 # Función para generar el PDF con una imagen de fondo y texto parametrizado
-def generate_pdf(data, filename, background_image, font_settings):
+def generate_pdf(data, filename, background_image, font_settings, y_start):
     pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
     pdf.image(background_image, x=0, y=0, w=1650, h=1275)
-    y_start = 470
     
     for key, value in data.items():
         if key in font_settings:
@@ -56,6 +55,9 @@ uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
 background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
 font_file = st.file_uploader("Cargar archivo de configuración de fuentes (txt)", type=["txt"])
 
+# Input para que el usuario defina el valor inicial de y_start
+y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value=460)
+
 if uploaded_file is not None and background_image is not None and font_file is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
@@ -77,7 +79,7 @@ if uploaded_file is not None and background_image is not None and font_file is n
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, bg_image_path, font_settings)
+            generate_pdf(data, pdf_filename, bg_image_path, font_settings, y_start_user)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
