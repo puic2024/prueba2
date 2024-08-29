@@ -21,7 +21,7 @@ def generate_pdf(data, filename, background_image, font_settings, y_start):
             pdf.set_font(font_type, size=font_size)
             pdf.set_text_color(*font_color)
             
-            line_height = pdf.font_size * 1.5
+            line_height = pdf.font_size * 1.2
             text_width = 1100  # Ancho fijo para el texto
             pdf.set_xy((1650 - text_width) / 2, y_start)
             
