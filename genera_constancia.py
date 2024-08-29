@@ -150,9 +150,11 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
             generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
             pdf_files.append(pdf_filename)
         
+        # Crear el archivo ZIP
         zip_filename = "pdf_files.zip"
         create_zip(pdf_files, zip_filename)
         
+        # Descargar el archivo ZIP
         with open(zip_filename, "rb") as f:
             bytes_data = f.read()
             st.download_button(
