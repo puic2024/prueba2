@@ -80,9 +80,6 @@ if uploaded_file is not None and background_image is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
     st.dataframe(df)
-
-    st.write("Configuración de fuentes ingresada:")
-    st.code(font_settings_input, language='python')
     
     try:
         font_settings = ast.literal_eval(font_settings_input)
