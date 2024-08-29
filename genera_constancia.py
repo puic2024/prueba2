@@ -89,6 +89,13 @@ image = Image.open(background_image_path)
 image = image.resize((330, 255))
 st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
+# Selectbox para que el usuario elija un valor entre 1, 2 o 3
+selected_value = st.selectbox("Seleccione un valor:", options=[1, 2, 3])
+
+# Botón para confirmar la selección
+if st.button("Confirmar selección"):
+    st.write(f"Has seleccionado el valor: {selected_value}")
+
 if input_text:
     # Convertir el texto en un DataFrame
     input_data = StringIO(input_text)
