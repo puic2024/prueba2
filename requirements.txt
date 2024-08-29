@@ -3,4 +3,5 @@ reportlab
 Pillow 
 pytesseract
 pdf2image
+poppler
 pymupdf
