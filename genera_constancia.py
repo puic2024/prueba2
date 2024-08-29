@@ -50,8 +50,7 @@ def create_zip(pdf_files, zip_filename):
 st.title("Generador de constancias PUIC")
 
 # Input para que el usuario introduzca el texto delimitado por "|"
-input_text = st.text_area("Introduce el texto delimitado por '|':", height=200, value=
-"""
+input_text = st.text_area("Introduce el texto delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
 a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
@@ -81,7 +80,7 @@ background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
 if input_text and background_image is not None:
     # Convertir el texto en un DataFrame
     input_data = StringIO(input_text)
-    df = pd.read_csv(input_data, sep="|")
+    df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
     st.write("DataFrame:")
     st.dataframe(df)
     
