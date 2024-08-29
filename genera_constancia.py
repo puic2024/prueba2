@@ -16,9 +16,10 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
             text = str(value)
             font_size = font_settings[key]['tamaño']
             font_type = font_settings[key]['tipo_letra']
+            font_style = font_settings[key].get('estilo', '')  # Estilo normal por defecto
             font_color = font_settings[key].get('color', (0, 0, 0))  # Color negro por defecto
             
-            pdf.set_font(font_type, size=font_size)
+            pdf.set_font(font_type, font_style, size=font_size)
             pdf.set_text_color(*font_color)
             
             line_height = pdf.font_size * line_height_multiplier
@@ -64,12 +65,12 @@ line_height_multiplier = st.number_input("Valor del interlineado (multiplicador)
 font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300)
 font_settings_input_default = """
 {
-    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "color": (0, 0, 0)},
-    "nombre": {"tamaño": 24, "tipo_letra": "Times", "color": (0, 0, 0)},
-    "por": {"tamaño": 18, "tipo_letra": "Courier", "color": (0, 0, 0)},
-    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "color": (0, 0, 0)},
-    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "color": (0, 0, 0)},
-    "fecha": {"tamaño": 18, "tipo_letra": "Times", "color": (0, 0, 0)}
+    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "nombre": {"tamaño": 24, "tipo_letra": "Times", "estilo": "B", "color": (0, 0, 0)},
+    "por": {"tamaño": 18, "tipo_letra": "Courier", "estilo": "I", "color": (0, 0, 0)},
+    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "estilo": "", "color": (0, 0, 0)},
+    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "estilo": "BI", "color": (0, 0, 0)},
+    "fecha": {"tamaño": 18, "tipo_letra": "Times", "estilo": "", "color": (0, 0, 0)}
 }
 """
 # Llenar el input de texto con un valor por defecto
