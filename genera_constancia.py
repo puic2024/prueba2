@@ -50,17 +50,17 @@ def create_zip(pdf_files, zip_filename):
 st.title("Generador de constancias PUIC")
 
 # Input para que el usuario introduzca el texto delimitado por "|"
-input_text = st.text_area("Introduce el texto delimitado por '|':", height=200, value="""
+input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
 a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 """)
 
-# Input para que el usuario defina el valor inicial de y_start
-y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value=460)
+# Input para que el usuario defina la altura inicial del texto
+y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", min_value=0, value=460)
 
 # Input para que el usuario defina el valor del interlineado
-line_height_multiplier = st.number_input("Valor del interlineado (multiplicador):", min_value=0.5, value=1.3, step=0.1)
+line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
 # Input de texto para la configuración de las fuentes
 font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
