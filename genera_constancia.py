@@ -92,8 +92,8 @@ st.image(image, caption="Previsualización de la imagen de fondo", use_column_wi
 # Input para que el usuario introduzca el texto delimitado por "|"
 input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
-a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
-a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
+a|Leonardo Dicaprio|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
+a|Paty Chapoy|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 """)
 
 # Convertir el texto en un DataFrame
@@ -134,15 +134,15 @@ for i in range(selected_value):
             f.write(image.read())
         uploaded_images.append(image_path)
 
-# Botón para generar PDFs (al final del proceso)
-if input_text and font_settings_input:
+# Botón para generar PDFs y descargar el ZIP
+if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
     try:
         font_settings = ast.literal_eval(font_settings_input)
     except Exception as e:
         st.error(f"Error en la configuración de fuentes: {e}")
         font_settings = None
     
-    if font_settings and st.button("Generar PDFs"):
+    if font_settings:
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
@@ -150,14 +150,15 @@ if input_text and font_settings_input:
             generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
             pdf_files.append(pdf_filename)
         
+        # Crear el archivo ZIP
         zip_filename = "pdf_files.zip"
         create_zip(pdf_files, zip_filename)
         
+        # Descargar el archivo ZIP
         with open(zip_filename, "rb") as f:
-            bytes_data = f.read()
             st.download_button(
                 label="Descargar ZIP",
-                data=bytes_data,
+                data=f.read(),
                 file_name=zip_filename,
                 mime="application/zip"
             )
