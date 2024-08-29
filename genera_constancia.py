@@ -77,7 +77,7 @@ st.title("Generador de constancias PUIC")
 
 # Cargar la imagen de fondo con valor predeterminado (después del título)
 st.markdown("### Cargar imagen de fondo:")
-background_image = st.file_uploader(type=["png"], accept_multiple_files=False)
+background_image = st.file_uploader("", type=["png"], accept_multiple_files=False)
 if background_image is None:
     background_image_path = "imagenes/background.png"
 else:
