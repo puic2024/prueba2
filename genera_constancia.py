@@ -75,20 +75,8 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
-# Cargar y mostrar la imagen "escudo.jpg" justo después del título
-escudo_image_path = "imagenes/escudo.jpg"
-escudo_image = Image.open(escudo_image_path)
-
-# Reducir las dimensiones a la mitad
-width, height = escudo_image.size
-escudo_image = escudo_image.resize((width // 1, height // 1))
-
-# Mostrar la imagen redimensionada
-st.image(escudo_image, caption="Escudo", use_column_width=False)
-
 # Cargar la imagen de fondo con valor predeterminado (después del título)
-st.markdown("### Cargar imagen de fondo:")
-background_image = st.file_uploader("", type=["png"], accept_multiple_files=False)
+background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
 if background_image is None:
     background_image_path = "imagenes/background.png"
 else:
@@ -102,8 +90,7 @@ image = image.resize((330, 255))
 st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
 # Input para que el usuario introduzca el texto delimitado por "|"
-st.markdown("### Introduce a los usuarios delimitado por '|':")
-input_text = st.text_area("", height=200, value="""
+input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
 a|Leonardo Dicaprio|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 a|Paty Chapoy|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
@@ -113,12 +100,11 @@ a|Paty Chapoy|Por haber asistido a la|Ponencia: "Infancias Derechos e Intercultu
 if input_text:
     input_data = StringIO(input_text)
     df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
-    st.write("Previsualización de los usuarios:")
+    st.write("DataFrame:")
     st.dataframe(df)
 
 # Input de texto para la configuración de las fuentes (después del DataFrame)
-st.markdown("### Introduce la configuración de las fuentes (en formato de diccionario):")
-font_settings_input = st.text_area("", height=300, value="""
+font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
 {
     "dirigido": {"tamaño": 35, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
     "nombre": {"tamaño": 40, "tipo_letra": "Arial", "estilo": "B", "color": (0, 0, 0)},
@@ -136,13 +122,12 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
-st.markdown("### Seleccione el número de firmantes:")
-selected_value = st.selectbox("", options=[1, 2, 3])
+selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
 
 # Cargar las imágenes adicionales según el valor seleccionado
 uploaded_images = []
 for i in range(selected_value):
-    image = st.file_uploader(f"Cargar firma {i+1}:", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
+    image = st.file_uploader(f"Cargar imagen adicional {i+1}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
     if image:
         image_path = image.name
         with open(image_path, "wb") as f:
@@ -160,4 +145,29 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
     if font_settings:
         pdf_files = []
         for index, row in df.iterrows():
-            data
+            data = row.to_dict()
+            pdf_filename = f"{data['nombre']}.pdf"
+            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
+            pdf_files.append(pdf_filename)
+        
+        # Crear el archivo ZIP
+        zip_filename = "pdf_files.zip"
+        create_zip(pdf_files, zip_filename)
+        
+        # Descargar el archivo ZIP
+        with open(zip_filename, "rb") as f:
+            st.download_button(
+                label="Descargar ZIP",
+                data=f.read(),
+                file_name=zip_filename,
+                mime="application/zip"
+            )
+        
+        # Limpiar archivos temporales
+        for pdf_file in pdf_files:
+            os.remove(pdf_file)
+        os.remove(zip_filename)
+        if background_image is not None:
+            os.remove(background_image_path)
+        for image_path in uploaded_images:
+            os.remove(image_path)
