@@ -52,9 +52,9 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
                     x_position = spacing + i * (image_width + spacing)
                     pdf.image(image_path, x=x_position, y=y_position, w=image_width, h=image_height)
                     
-                    # Añadir el nombre de la imagen debajo, centrado respecto a la imagen
-                    image_name = os.path.basename(image_path)
-                    pdf.set_font("Arial", "B", size=35)
+                    # Añadir el nombre de la imagen debajo, centrado respecto a la imagen (sin extensión)
+                    image_name = os.path.splitext(os.path.basename(image_path))[0]
+                    pdf.set_font("Arial", size=30)
                     pdf.set_text_color(0, 0, 0)
                     text_width = pdf.get_string_width(image_name)
                     pdf.set_xy(x_position + (image_width - text_width) / 2, y_position + image_height + 10)
