@@ -50,6 +50,20 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
+# Cargar la imagen de fondo con valor predeterminado (después de la configuración de fuentes)
+background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
+if background_image is None:
+    background_image_path = "imagenes/background.png"
+else:
+    background_image_path = background_image.name
+    with open(background_image_path, "wb") as f:
+        f.write(background_image.read())
+
+# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
+image = Image.open(background_image_path)
+image = image.resize((330, 255))
+st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
+
 # Input para que el usuario introduzca el texto delimitado por "|"
 input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
@@ -81,20 +95,6 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 
 # Input para que el usuario defina el valor del interlineado
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
-
-# Cargar la imagen de fondo con valor predeterminado (después de la configuración de fuentes)
-background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
-if background_image is None:
-    background_image_path = "imagenes/background.png"
-else:
-    background_image_path = background_image.name
-    with open(background_image_path, "wb") as f:
-        f.write(background_image.read())
-
-# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
-image = Image.open(background_image_path)
-image = image.resize((330, 255))
-st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3
 selected_value = st.selectbox("Seleccione un valor:", options=[1, 2, 3])
