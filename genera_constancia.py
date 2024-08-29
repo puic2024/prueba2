@@ -116,7 +116,7 @@ a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Dere
 if input_text:
     input_data = StringIO(input_text)
     df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
-    st.write("DataFrame:")
+    st.write("Previsualización de la información:")
     st.dataframe(df)
 
 # Input de texto para la configuración de las fuentes (después del DataFrame)
