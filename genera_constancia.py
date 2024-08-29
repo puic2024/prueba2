@@ -75,6 +75,17 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
+# Cargar y mostrar la imagen "escudo.jpg" justo después del título
+escudo_image_path = "imagenes/escudo.jpg"
+escudo_image = Image.open(escudo_image_path)
+
+# Reducir las dimensiones a la mitad
+width, height = escudo_image.size
+escudo_image = escudo_image.resize((width // 2, height // 2))
+
+# Mostrar la imagen redimensionada
+st.image(escudo_image, caption="Escudo", use_column_width=False)
+
 # Cargar la imagen de fondo con valor predeterminado (después del título)
 st.markdown("### Cargar imagen de fondo:")
 background_image = st.file_uploader("", type=["png"], accept_multiple_files=False)
@@ -149,29 +160,4 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
     if font_settings:
         pdf_files = []
         for index, row in df.iterrows():
-            data = row.to_dict()
-            pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
-            pdf_files.append(pdf_filename)
-        
-        # Crear el archivo ZIP
-        zip_filename = "pdf_files.zip"
-        create_zip(pdf_files, zip_filename)
-        
-        # Descargar el archivo ZIP
-        with open(zip_filename, "rb") as f:
-            st.download_button(
-                label="Descargar ZIP",
-                data=f.read(),
-                file_name=zip_filename,
-                mime="application/zip"
-            )
-        
-        # Limpiar archivos temporales
-        for pdf_file in pdf_files:
-            os.remove(pdf_file)
-        os.remove(zip_filename)
-        if background_image is not None:
-            os.remove(background_image_path)
-        for image_path in uploaded_images:
-            os.remove(image_path)
+            data
