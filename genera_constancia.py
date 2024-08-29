@@ -50,11 +50,6 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
-# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
-image = Image.open(background_image_path)
-image = image.resize((330, 255))
-st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
-
 # Input para que el usuario introduzca el texto delimitado por "|"
 input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
@@ -95,6 +90,11 @@ else:
     background_image_path = background_image.name
     with open(background_image_path, "wb") as f:
         f.write(background_image.read())
+
+# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
+image = Image.open(background_image_path)
+image = image.resize((330, 255))
+st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3
 selected_value = st.selectbox("Seleccione un valor:", options=[1, 2, 3])
