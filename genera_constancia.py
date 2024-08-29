@@ -8,10 +8,13 @@ from io import StringIO
 from PIL import Image
 
 # Función para generar el PDF con una imagen de fondo y texto parametrizado
-def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier):
+def generate_pdf(data, filename, background_images, font_settings, y_start, line_height_multiplier):
     pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
-    pdf.image(background_image, x=0, y=0, w=1650, h=1275)
+    
+    # Usar la primera imagen de fondo cargada (si hay más de una)
+    if background_images:
+        pdf.image(background_images[0], x=0, y=0, w=1650, h=1275)
     
     for key, value in data.items():
         if key in font_settings:
@@ -50,19 +53,24 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
-# Cargar la imagen de fondo con valor predeterminado (después del título)
-background_image = st.file_uploader("Cargar imagen de fondo", type=["png"], accept_multiple_files=False)
-if background_image is None:
-    background_image_path = "imagenes/background.png"
-else:
-    background_image_path = background_image.name
-    with open(background_image_path, "wb") as f:
-        f.write(background_image.read())
+# Selectbox para que el usuario elija un valor entre 1, 2 o 3
+selected_value = st.selectbox("Seleccione el número de imágenes a cargar:", options=[1, 2, 3])
 
-# Previsualizar la imagen de fondo cargada o predeterminada con tamaño 330x255
-image = Image.open(background_image_path)
-image = image.resize((330, 255))
-st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
+# Cargar las imágenes según el valor seleccionado
+uploaded_images = []
+for i in range(selected_value):
+    image = st.file_uploader(f"Cargar imagen {i+1}", type=["png", "jpg", "jpeg"], key=f"image_uploader_{i}")
+    if image:
+        image_path = f"imagen{i+1}.jpg"
+        with open(image_path, "wb") as f:
+            f.write(image.read())
+        uploaded_images.append(image_path)
+
+# Previsualizar las imágenes cargadas con tamaño 330x255
+for i, image_path in enumerate(uploaded_images):
+    image = Image.open(image_path)
+    image = image.resize((330, 255))
+    st.image(image, caption=f"Previsualización de la imagen {i+1}", use_column_width=False)
 
 # Input para que el usuario introduzca el texto delimitado por "|"
 input_text = st.text_area("Introduce a los usuarios delimitado por '|':", height=200, value="""
@@ -96,9 +104,6 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 # Input para que el usuario defina el valor del interlineado
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
-# Selectbox para que el usuario elija un valor entre 1, 2 o 3
-selected_value = st.selectbox("Seleccione un valor:", options=[1, 2, 3])
-
 # Botón para confirmar la selección
 if st.button("Confirmar selección"):
     st.write(f"Has seleccionado el valor: {selected_value}")
@@ -115,7 +120,7 @@ if input_text and font_settings_input:
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier)
+            generate_pdf(data, pdf_filename, uploaded_images, font_settings, y_start_user, line_height_multiplier)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
@@ -134,5 +139,5 @@ if input_text and font_settings_input:
         for pdf_file in pdf_files:
             os.remove(pdf_file)
         os.remove(zip_filename)
-        if background_image is not None:
-            os.remove(background_image_path)
+        for image_path in uploaded_images:
+            os.remove(image_path)
