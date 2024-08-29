@@ -24,7 +24,9 @@ def generate_pdf(data, filename, background_image, font_settings):
             
             text_width = pdf.get_string_width(text) + 6
             line_height = pdf.font_size * 1.5
-            pdf.set_xy(1400, y_start)
+            pdf.set_xy((1650 - text_width) / 2, y_start)
+            print(text_width)
+            pdf.set_xy((1650 - 12) / 2, y_start)
             pdf.cell(text_width, line_height, text, ln=True, align='C')
             y_start += line_height
     
