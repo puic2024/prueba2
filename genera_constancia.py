@@ -156,10 +156,9 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
         
         # Descargar el archivo ZIP
         with open(zip_filename, "rb") as f:
-            bytes_data = f.read()
             st.download_button(
                 label="Descargar ZIP",
-                data=bytes_data,
+                data=f.read(),
                 file_name=zip_filename,
                 mime="application/zip"
             )
