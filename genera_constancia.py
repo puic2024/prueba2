@@ -8,7 +8,7 @@ from io import StringIO
 from PIL import Image
 
 # Función para generar el PDF con una imagen de fondo y texto parametrizado
-def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier):
+def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier, additional_images):
     pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
     pdf.image(background_image, x=0, y=0, w=1650, h=1275)
@@ -39,6 +39,16 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
             # Ajustar y_start dependiendo del número de líneas ocupadas
             y_start += line_height * lines_count
     
+    # Distribuir las imágenes adicionales de manera uniforme y centrada
+    if additional_images:
+        image_width = 200  # Ancho de cada imagen
+        spacing = (1650 - (image_width * len(additional_images))) / (len(additional_images) + 1)
+        y_position = y_start + 20  # Posición vertical después del último texto
+
+        for i, image_path in enumerate(additional_images):
+            x_position = spacing + i * (image_width + spacing)
+            pdf.image(image_path, x=x_position, y=y_position, w=image_width)
+
     pdf.output(filename)
 
 # Función para crear archivos ZIP
@@ -108,7 +118,7 @@ if input_text and font_settings_input:
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier)
+            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
