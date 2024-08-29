@@ -7,7 +7,7 @@ import ast
 from io import StringIO
 from PIL import Image
 
-# Función para generar el PDF con una imagen de fondo y texto parametrizado
+# Función para generar el PDF con una imagen de fondo, texto parametrizado y añadir imágenes adicionales con nombres centrados
 def generate_pdf(data, filename, background_image, font_settings, y_start, line_height_multiplier, additional_images):
     pdf = FPDF(unit='pt', format=[1650, 1275])
     pdf.add_page()
@@ -49,7 +49,15 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
         for i, image_path in enumerate(additional_images):
             if os.path.exists(image_path):
                 try:
-                    pdf.image(image_path, x=spacing + i * (image_width + spacing), y=y_position, w=image_width, h=image_height)
+                    x_position = spacing + i * (image_width + spacing)
+                    pdf.image(image_path, x=x_position, y=y_position, w=image_width, h=image_height)
+                    
+                    # Añadir el nombre de la imagen debajo, centrado respecto a la imagen
+                    image_name = os.path.basename(image_path)
+                    pdf.set_font("Arial", size=12)
+                    text_width = pdf.get_string_width(image_name)
+                    pdf.set_xy(x_position + (image_width - text_width) / 2, y_position + image_height + 5)
+                    pdf.cell(text_width, 10, image_name, align='C')
                 except RuntimeError as e:
                     st.error(f"No se pudo cargar la imagen {image_path}. Error: {e}")
             else:
@@ -158,6 +166,4 @@ if input_text and font_settings_input:
             os.remove(pdf_file)
         os.remove(zip_filename)
         if background_image is not None:
-            os.remove(background_image_path)
-        for image_path in uploaded_images:
-            os.remove(image_path)
+            os.remove(background
