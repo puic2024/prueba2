@@ -17,7 +17,11 @@ def generate_pdf(data, filename, background_image, font_settings):
             text = str(value)
             font_size = font_settings[key]['tamaño']
             font_type = font_settings[key]['tipo_letra']
+            font_color = font_settings[key].get('color', (0, 0, 0))  # Color negro por defecto
+            
             pdf.set_font(font_type, size=font_size)
+            pdf.set_text_color(*font_color)
+            
             text_width = pdf.get_string_width(text) + 6
             line_height = pdf.font_size * 1.5
             pdf.set_xy((1650 - text_width) / 2, y_start)
