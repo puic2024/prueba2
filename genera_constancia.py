@@ -100,7 +100,7 @@ a|Paty Chapoy|Por haber asistido a la|Ponencia: "Infancias Derechos e Intercultu
 if input_text:
     input_data = StringIO(input_text)
     df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
-    st.write("DataFrame:")
+    st.write("Previsualización de los usuarios:")
     st.dataframe(df)
 
 # Input de texto para la configuración de las fuentes (después del DataFrame)
@@ -122,7 +122,7 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
 # Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
-selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
+selected_value = st.selectbox("Seleccione el número de firmantes:", options=[1, 2, 3])
 
 # Cargar las imágenes adicionales según el valor seleccionado
 uploaded_images = []
