@@ -142,9 +142,3 @@ for i in range(selected_value):
         with open(image_path, "wb") as f:
             f.write(image.read())
         uploaded_images.append(image_path)
-
-# Previsualizar las imágenes adicionales cargadas con tamaño 330x255
-for i, image_path in enumerate(uploaded_images):
-    image = Image.open(image_path)
-    image = image.resize((330, 255))
-    st.image(image, caption=f"Previsualización de la imagen adicional {i+1}", use_column_width=False)
