@@ -119,7 +119,7 @@ uploaded_images = []
 for i in range(selected_value):
     image = st.file_uploader(f"Cargar imagen adicional {i+1}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
     if image:
-        image_path = f"imagen_adicional{i+1}.jpg"
+        image_path = image.name
         with open(image_path, "wb") as f:
             f.write(image.read())
         uploaded_images.append(image_path)
