@@ -166,4 +166,6 @@ if input_text and font_settings_input:
             os.remove(pdf_file)
         os.remove(zip_filename)
         if background_image is not None:
-            os.remove(background
+            os.remove(background_image_path)
+        for image_path in uploaded_images:
+            os.remove(image_path)
