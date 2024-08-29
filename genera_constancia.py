@@ -121,18 +121,12 @@ y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", 
 # Input para que el usuario defina el valor del interlineado
 line_height_multiplier = st.number_input("Valor del interlineado:", min_value=0.5, value=1.3, step=0.1)
 
-# Selectbox para que el usuario elija un valor entre 1, 2 o 3 para cargar imágenes adicionales
-selected_value = st.selectbox("Seleccione el número de imágenes adicionales a cargar:", options=[1, 2, 3])
-
-# Cargar las imágenes adicionales según el valor seleccionado
-uploaded_images = []
-for i in range(selected_value):
-    image = st.file_uploader(f"Cargar imagen adicional {i+1}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
-    if image:
-        image_path = image.name
-        with open(image_path, "wb") as f:
-            f.write(image.read())
-        uploaded_images.append(image_path)
+# Precargar las tres imágenes adicionales desde la carpeta "imagenes"
+preloaded_images = [
+    "imagenes/Dr. Homero Simpson.png",
+    "imagenes/Lic. Jennifer Lopez.png",
+    "imagenes/Mtra. Danna Paola Rivera.png"
+]
 
 # Botón para generar PDFs (al final del proceso)
 if input_text and font_settings_input:
@@ -147,7 +141,7 @@ if input_text and font_settings_input:
         for index, row in df.iterrows():
             data = row.to_dict()
             pdf_filename = f"{data['nombre']}.pdf"
-            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
+            generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, preloaded_images)
             pdf_files.append(pdf_filename)
         
         zip_filename = "pdf_files.zip"
@@ -168,6 +162,3 @@ if input_text and font_settings_input:
         os.remove(zip_filename)
         if background_image is not None:
             os.remove(background_image_path)
-        for image_path in uploaded_images:
-            os.remove(image_path)
-
