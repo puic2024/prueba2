@@ -57,6 +57,13 @@ a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e In
 a|José Eduardo Rendón Lezama|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
 """)
 
+# Convertir el texto en un DataFrame
+if input_text:
+    input_data = StringIO(input_text)
+    df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
+    st.write("DataFrame:")
+    st.dataframe(df)
+
 # Input para que el usuario defina la altura inicial del texto
 y_start_user = st.number_input("Altura en donde empezará el texto (pixeles):", min_value=0, value=460)
 
@@ -96,13 +103,7 @@ selected_value = st.selectbox("Seleccione un valor:", options=[1, 2, 3])
 if st.button("Confirmar selección"):
     st.write(f"Has seleccionado el valor: {selected_value}")
 
-if input_text:
-    # Convertir el texto en un DataFrame
-    input_data = StringIO(input_text)
-    df = pd.read_csv(input_data, sep="|", quotechar='~')  # Usar un caracter que no aparece en el texto
-    st.write("DataFrame:")
-    st.dataframe(df)
-    
+if input_text and font_settings_input:
     try:
         font_settings = ast.literal_eval(font_settings_input)
     except Exception as e:
