@@ -105,7 +105,7 @@ image = image.resize((330, 255))
 st.image(image, caption="Previsualización de la imagen de fondo", use_column_width=False)
 
 # Input para que el usuario introduzca el texto delimitado por "|"
-st.markdown("### Introduce a los usuarios delimitado por '|':")
+st.markdown("### Introduce a los usuarios delimitado por '|', NO PUEDE HABER REGISTROS CON MISMO NOMBRE:")
 input_text = st.text_area("", height=200, value="""
 dirigido|nombre|por|actividad|eslogan|fecha
 a|Eduardo Melo Gómez|Por haber asistido a la|Ponencia: "Infancias Derechos e Interculturalidad" que se llevó a cabo el 21 de junio de 2024 en el marco del Seminario Permanente de Diversidad Cultural e Interculturalidad.|"POR MI RAZA HABLARÁ EL ESPÍRITU"|Ciudad Universitaria, Cd. Mx., a 07 agosto 2024
