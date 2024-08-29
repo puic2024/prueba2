@@ -134,15 +134,15 @@ for i in range(selected_value):
             f.write(image.read())
         uploaded_images.append(image_path)
 
-# Botón para generar PDFs y descargar el ZIP
-if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
+# Botón para generar PDFs (al final del proceso)
+if input_text and font_settings_input:
     try:
         font_settings = ast.literal_eval(font_settings_input)
     except Exception as e:
         st.error(f"Error en la configuración de fuentes: {e}")
         font_settings = None
     
-    if font_settings:
+    if font_settings and st.button("Generar PDFs"):
         pdf_files = []
         for index, row in df.iterrows():
             data = row.to_dict()
@@ -150,15 +150,14 @@ if input_text and font_settings_input and st.button("Generar y Descargar PDFs"):
             generate_pdf(data, pdf_filename, background_image_path, font_settings, y_start_user, line_height_multiplier, uploaded_images)
             pdf_files.append(pdf_filename)
         
-        # Crear el archivo ZIP
         zip_filename = "pdf_files.zip"
         create_zip(pdf_files, zip_filename)
         
-        # Descargar el archivo ZIP
         with open(zip_filename, "rb") as f:
+            bytes_data = f.read()
             st.download_button(
                 label="Descargar ZIP",
-                data=f.read(),
+                data=bytes_data,
                 file_name=zip_filename,
                 mime="application/zip"
             )
