@@ -53,7 +53,6 @@ st.image("imagenes/escudo.jpg")
 # Cargar archivo CSV
 uploaded_file = st.file_uploader("Cargar CSV", type=["csv"])
 background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
-font_file = st.file_uploader("Cargar archivo de configuración de fuentes (txt)", type=["txt"])
 
 # Input para que el usuario defina el valor inicial de y_start
 y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value=460)
@@ -61,19 +60,37 @@ y_start_user = st.number_input("Valor inicial para y_start:", min_value=0, value
 # Input para que el usuario defina el valor del interlineado
 line_height_multiplier = st.number_input("Valor del interlineado (multiplicador):", min_value=0.5, value=1.3, step=0.1)
 
-if uploaded_file is not None and background_image is not None and font_file is not None:
+# Input de texto para la configuración de las fuentes
+font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300)
+font_settings_input_default = """
+{
+    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "color": (0, 0, 0)},
+    "nombre": {"tamaño": 24, "tipo_letra": "Times", "color": (0, 0, 0)},
+    "por": {"tamaño": 18, "tipo_letra": "Courier", "color": (0, 0, 0)},
+    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "color": (0, 0, 0)},
+    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "color": (0, 0, 0)},
+    "fecha": {"tamaño": 18, "tipo_letra": "Times", "color": (0, 0, 0)}
+}
+"""
+# Llenar el input de texto con un valor por defecto
+if not font_settings_input.strip():
+    font_settings_input = font_settings_input_default
+
+if uploaded_file is not None and background_image is not None:
     df = pd.read_csv(uploaded_file, encoding='utf-8')
     st.write("DataFrame:")
     st.dataframe(df)
 
-    # Leer y mostrar el contenido del archivo de configuración de fuentes
-    font_file_content = font_file.read().decode('utf-8')
-    st.write("Contenido del archivo de configuración de fuentes (txt):")
-    st.code(font_file_content, language='python')
+    st.write("Configuración de fuentes ingresada:")
+    st.code(font_settings_input, language='python')
     
-    font_settings = ast.literal_eval(font_file_content)
+    try:
+        font_settings = ast.literal_eval(font_settings_input)
+    except Exception as e:
+        st.error(f"Error en la configuración de fuentes: {e}")
+        font_settings = None
     
-    if st.button("Generar PDFs"):
+    if font_settings and st.button("Generar PDFs"):
         bg_image_path = "background_image.png"
         with open(bg_image_path, "wb") as f:
             f.write(background_image.read())
