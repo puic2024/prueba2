@@ -75,11 +75,17 @@ def create_zip(pdf_files, zip_filename):
 # Configuración de Streamlit
 st.title("Generador de constancias PUIC")
 
-# Mostrar la imagen "escudo.jpg" justo después del título
+# Mostrar la imagen "escudo.jpg" justo después del título con una reducción al 60% de su tamaño original
 escudo_image_path = "imagenes/escudo.jpg"
 if os.path.exists(escudo_image_path):
     escudo_image = Image.open(escudo_image_path)
-    st.image(escudo_image, caption="Escudo", use_column_width=True)
+    
+    # Redimensionar la imagen al 60% de su tamaño original
+    width, height = escudo_image.size
+    new_size = (int(width * 0.6), int(height * 0.6))
+    escudo_image_resized = escudo_image.resize(new_size)
+    
+    st.image(escudo_image_resized, caption="Escudo", use_column_width=False)
 else:
     st.error(f"La imagen {escudo_image_path} no existe.")
 
