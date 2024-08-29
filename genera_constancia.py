@@ -57,6 +57,7 @@ if uploaded_file is not None and background_image is not None and font_file is n
     # Leer y mostrar el contenido del archivo de configuración de fuentes
     font_file_content = font_file.read().decode('utf-8')
     st.write("Contenido del archivo de configuración de fuentes (txt):")
+    st.write(text_width)
     st.code(font_file_content, language='python')
     
     font_settings = ast.literal_eval(font_file_content)
