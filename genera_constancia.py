@@ -74,7 +74,10 @@ font_settings_input = st.text_area("Introduce la configuración de las fuentes (
 }
 """)
 
-if input_text:
+# Cargar la imagen de fondo
+background_image = st.file_uploader("Cargar imagen de fondo", type=["png"])
+
+if input_text and background_image is not None:
     # Convertir el texto en un DataFrame
     input_data = StringIO(input_text)
     df = pd.read_csv(input_data, sep="|")
