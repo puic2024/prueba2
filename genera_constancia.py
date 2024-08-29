@@ -64,12 +64,12 @@ line_height_multiplier = st.number_input("Valor del interlineado (multiplicador)
 # Input de texto para la configuración de las fuentes
 font_settings_input = st.text_area("Introduce la configuración de las fuentes (en formato de diccionario):", height=300, value="""
 {
-    "dirigido": {"tamaño": 18, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},  # Normal
-    "nombre": {"tamaño": 24, "tipo_letra": "Times", "estilo": "B", "color": (0, 0, 0)},  # Negrita
-    "por": {"tamaño": 18, "tipo_letra": "Courier", "estilo": "I", "color": (0, 0, 0)},  # Cursiva
-    "actividad": {"tamaño": 20, "tipo_letra": "Helvetica", "estilo": "", "color": (0, 0, 0)},  # Normal
-    "eslogan": {"tamaño": 16, "tipo_letra": "Arial", "estilo": "BI", "color": (0, 0, 0)},  # Negrita y Cursiva
-    "fecha": {"tamaño": 18, "tipo_letra": "Times", "estilo": "", "color": (0, 0, 0)}  # Normal
+    "dirigido": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "nombre": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "por": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "actividad": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "eslogan": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)},
+    "fecha": {"tamaño": 30, "tipo_letra": "Arial", "estilo": "", "color": (0, 0, 0)}
 }
 """)
 
