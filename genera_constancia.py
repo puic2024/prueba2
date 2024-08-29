@@ -82,7 +82,7 @@ if os.path.exists(escudo_image_path):
     
     # Redimensionar la imagen al 60% de su tamaño original
     width, height = escudo_image.size
-    new_size = (int(width * 0.6), int(height * 0.6))
+    new_size = (int(width * 0.8), int(height * 0.8))
     escudo_image_resized = escudo_image.resize(new_size)
     
     st.image(escudo_image_resized, caption="Escudo", use_column_width=False)
