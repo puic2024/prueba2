@@ -39,10 +39,10 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
             # Ajustar y_start dependiendo del número de líneas ocupadas
             y_start += line_height * lines_count
     
-    # Distribuir las imágenes adicionales de manera uniforme y centrada con tamaño 150x150
+    # Distribuir las imágenes adicionales de manera uniforme y centrada con tamaño 130x130
     if additional_images:
-        image_width = 150  # Ancho de cada imagen
-        image_height = 150  # Alto de cada imagen
+        image_width = 130  # Ancho de cada imagen
+        image_height = 130  # Alto de cada imagen
         spacing = (1650 - (image_width * len(additional_images))) / (len(additional_images) + 1)
         y_position = y_start + 20  # Posición vertical después del último texto
 
@@ -54,9 +54,10 @@ def generate_pdf(data, filename, background_image, font_settings, y_start, line_
                     
                     # Añadir el nombre de la imagen debajo, centrado respecto a la imagen
                     image_name = os.path.basename(image_path)
-                    pdf.set_font("Arial", size=12)
+                    pdf.set_font("Arial", "B", size=35)
+                    pdf.set_text_color(0, 0, 0)
                     text_width = pdf.get_string_width(image_name)
-                    pdf.set_xy(x_position + (image_width - text_width) / 2, y_position + image_height + 5)
+                    pdf.set_xy(x_position + (image_width - text_width) / 2, y_position + image_height + 10)
                     pdf.cell(text_width, 10, image_name, align='C')
                 except RuntimeError as e:
                     st.error(f"No se pudo cargar la imagen {image_path}. Error: {e}")
