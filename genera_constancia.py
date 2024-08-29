@@ -142,7 +142,7 @@ selected_value = st.selectbox("", options=[1, 2, 3])
 # Cargar las imágenes adicionales según el valor seleccionado
 uploaded_images = []
 for i in range(selected_value):
-    image = st.file_uploader(f"Cargar imagen adicional {i+1}", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
+    image = st.file_uploader(f"Cargar firma {i+1}:", type=["png", "jpg", "jpeg"], key=f"additional_image_uploader_{i}")
     if image:
         image_path = image.name
         with open(image_path, "wb") as f:
